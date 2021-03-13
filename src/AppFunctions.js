@@ -2,17 +2,21 @@ const createShip = (length) => {
   const hitPoints = [];
 
   for (let i = 0; i < length; i++) {
-    hitPoints.push(false);
+    hitPoints.push({
+      x: '',
+      y: '',
+      hit: false,
+    });
   }
 
   const hit = (position) => {
-    hitPoints[position] = true;
+    hitPoints[position].hit = true;
     return hitPoints;
   };
 
   const isSunk = (hitPoints) => {
     for (let i = 0; i < length; i++) {
-      if (!hitPoints[i]) {
+      if (!hitPoints[i].hit) {
         return false;
       }
     }
@@ -36,6 +40,19 @@ const Gameboard = (type) => {
     [false, false, false, false, false, false, false, false, false, false],
   ];
 
+  const missedAtttacks = [];
+
+  const receiveAttack = (x, y) => {
+    if (!array[x][y]) {
+      array[x][y] = 'missed';
+      return 'missed';
+    } else if (array[x][y] !== 'missed') {
+      array[x][y].hit = true;
+      console.log(array[(x, y)]);
+      return array[(x, y)];
+    }
+  };
+
   const placeShip = (x, y, ship, direction) => {
     if (x < 0 || y < 0) {
       return false;
@@ -46,7 +63,9 @@ const Gameboard = (type) => {
         return false;
       } else {
         for (let i = 0; i < ship.length; i++) {
-          array[x][i + y] = true;
+          ship.hitPoints[i].x = x;
+          ship.hitPoints[i].y = i + y;
+          array[x][i + y] = ship.hitPoints[i];
         }
         return array;
       }
@@ -57,14 +76,16 @@ const Gameboard = (type) => {
         return false;
       } else {
         for (let i = 0; i < ship.length; i++) {
-          array[i + x][y] = true;
+          ship.hitPoints[i].x = i + x;
+          ship.hitPoints[i].y = y;
+          array[i + x][y] = ship.hitPoints[i];
         }
         return array;
       }
     }
   };
 
-  return { array, placeShip };
+  return { array, missedAtttacks, placeShip, receiveAttack };
 };
 
 export { createShip, Gameboard };
