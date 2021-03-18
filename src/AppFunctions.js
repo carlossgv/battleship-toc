@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const createShip = (length) => {
   const hitPoints = [];
 
@@ -104,11 +106,35 @@ const createGameboard = (type) => {
 const createPlayer = (type) => {
   let name = '';
   if (type !== 'computer') {
-    // name = prompt('Please enter your name');
     name = 'User';
   } else {
     name = 'computer';
   }
+
+  const sendAttack = (enemyPrimaryArray) => {
+    let randomX = _.random(0, 9);
+    let randomY = _.random(0, 9);
+    console.log(randomX, randomY);
+    console.log(enemyPrimaryArray);
+    console.log(enemyPrimaryArray[randomX][randomY]);
+
+    if (!enemyPrimaryArray[randomX][randomY]) {
+      console.log('missed');
+      return 'missed';
+    } else if (
+      enemyPrimaryArray[randomX][randomY] === 'missed' ||
+      enemyPrimaryArray[randomX][randomY].hit
+    ) {
+      console.log('Coordinate already occupied');
+      sendAttack(enemyPrimaryArray);
+    } else {
+      console.log('hit');
+      enemyPrimaryArray[randomX][randomY].hit = true;
+      return 'hit';
+    }
+  };
+
+  return { name, sendAttack };
 };
 
 const getCoordinatesFromString = (stringCoordinates) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Gameboard from './Gameboard';
 import {
   createShip,
@@ -46,14 +46,11 @@ const Main = () => {
       attackCoordinates[1]
     );
 
-    console.log(computerPrimaryGrid.array);
+    console.log(userPrimaryGrid.array);
+    computer.sendAttack(userPrimaryGrid.array);
 
     computerPrimaryGrid.allShipSunked();
   };
-
-  while (!userPrimaryGrid.allShipSunked || !computerPrimaryGrid.allShipSunked) {
-    //User turn
-  }
 
   return (
     <div className="main">
@@ -61,6 +58,7 @@ const Main = () => {
         type={'primary'}
         board={userPrimaryGrid}
         array={userPrimaryGrid.array}
+        enemyArray={computerTrackingGrid}
       />
       <Gameboard
         type={'tracking'}

@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { createShip, getCoordinatesFromString } from '../AppFunctions';
+import React, { useState } from 'react';
+import { getCoordinatesFromString } from '../AppFunctions';
 import './Square.css';
 
 const Square = (props) => {
   let secondaryClass = '';
+
+  // CHANGE STATE ON TRACKING BOARD
   const [isHitClass, setIsHitClass] = useState('notHit');
+
+  // CHANGE STATE ON PRIMARY BOARD (RECEIVED ATTACK)
+  const [receivedHitClass, setReceivedHitClas] = useState('noHit');
 
   if (props.type === false) {
     secondaryClass = 'emptySquare';
@@ -13,11 +18,13 @@ const Square = (props) => {
   }
 
   const changeHitClass = (e) => {
-    let coords = getCoordinatesFromString(e.target.id);
-    if (props.enemyArray[coords[0]][coords[1]] instanceof Object) {
-      setIsHitClass('isHit');
-    } else {
-      setIsHitClass('isMiss');
+    if (props.boardType === 'tracking') {
+      let coords = getCoordinatesFromString(e.target.id);
+      if (props.enemyArray[coords[0]][coords[1]] instanceof Object) {
+        setIsHitClass('isHit');
+      } else {
+        setIsHitClass('isMiss');
+      }
     }
   };
 

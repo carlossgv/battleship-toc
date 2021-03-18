@@ -19,7 +19,7 @@ const Gameboard = (props) => {
 
       squaresArray.push(
         <Square
-          board={props.type}
+          boardType={props.type}
           key={`${x}, ${y}`}
           id={`${x}, ${y}`}
           row={x}
