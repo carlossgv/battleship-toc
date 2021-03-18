@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Gameboard from './Gameboard';
 import {
   createShip,
@@ -18,6 +18,7 @@ const Main = () => {
   const destroyer = createShip(2);
 
   // Gameboards setup
+
   const userPrimaryGrid = createGameboard('primary');
   const userTrackingGrid = createGameboard('tracking');
 
@@ -47,7 +48,17 @@ const Main = () => {
     );
 
     console.log(userPrimaryGrid.array);
-    computer.sendAttack(userPrimaryGrid.array);
+    const computerAttack = computer.sendAttack(userPrimaryGrid.array);
+    console.log(computerAttack.x, computerAttack.y, computerAttack.action);
+
+    // TODO: Check if there is a way to do this inside Square component
+    if (computerAttack) {
+      const domComputerAttack = document.querySelector(
+        `.primaryBoard #\\3${computerAttack.x} \\,${computerAttack.y}`
+      );
+      domComputerAttack.classList.remove('notHit');
+      domComputerAttack.classList.add('isHit');
+    }
 
     computerPrimaryGrid.allShipSunked();
   };

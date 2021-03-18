@@ -6,10 +6,10 @@ const Square = (props) => {
   let secondaryClass = '';
 
   // CHANGE STATE ON TRACKING BOARD
-  const [isHitClass, setIsHitClass] = useState('notHit');
+  const [attackHitClass, setAttackHitClass] = useState('notHit');
 
   // CHANGE STATE ON PRIMARY BOARD (RECEIVED ATTACK)
-  const [receivedHitClass, setReceivedHitClas] = useState('noHit');
+  const [receivedHitClass, setReceivedHitClass] = useState('');
 
   if (props.type === false) {
     secondaryClass = 'emptySquare';
@@ -21,16 +21,16 @@ const Square = (props) => {
     if (props.boardType === 'tracking') {
       let coords = getCoordinatesFromString(e.target.id);
       if (props.enemyArray[coords[0]][coords[1]] instanceof Object) {
-        setIsHitClass('isHit');
+        setAttackHitClass('isHit');
       } else {
-        setIsHitClass('isMiss');
+        setAttackHitClass('isMiss');
       }
     }
   };
 
   return (
     <div
-      className={`square ${secondaryClass} ${isHitClass}`}
+      className={`square ${secondaryClass} ${attackHitClass}`}
       id={props.id}
       onClick={changeHitClass}
       onChange={props.onClick}

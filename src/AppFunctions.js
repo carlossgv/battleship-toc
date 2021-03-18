@@ -50,7 +50,8 @@ const createGameboard = (type) => {
         }
       }
     }
-    console.log('%c', 'color:red', 'GAME FINISHED! ALL SHIPS SUNKED!');
+    console.log('GAME FINISHED! ALL SHIPS SUNKED!');
+    alert('GAME FINISHED!');
     return true;
   };
 
@@ -114,23 +115,21 @@ const createPlayer = (type) => {
   const sendAttack = (enemyPrimaryArray) => {
     let randomX = _.random(0, 9);
     let randomY = _.random(0, 9);
-    console.log(randomX, randomY);
-    console.log(enemyPrimaryArray);
-    console.log(enemyPrimaryArray[randomX][randomY]);
 
-    if (!enemyPrimaryArray[randomX][randomY]) {
-      console.log('missed');
-      return 'missed';
-    } else if (
+    while (
       enemyPrimaryArray[randomX][randomY] === 'missed' ||
       enemyPrimaryArray[randomX][randomY].hit
     ) {
-      console.log('Coordinate already occupied');
-      sendAttack(enemyPrimaryArray);
+      randomX = _.random(0, 9);
+      randomY = _.random(0, 9);
+    }
+
+    if (!enemyPrimaryArray[randomX][randomY]) {
+      enemyPrimaryArray[randomX][randomY] = 'missed';
+      return { x: randomX, y: randomY, action: 'missed' };
     } else {
-      console.log('hit');
       enemyPrimaryArray[randomX][randomY].hit = true;
-      return 'hit';
+      return { x: randomX, y: randomY, action: 'hit' };
     }
   };
 

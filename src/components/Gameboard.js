@@ -20,8 +20,8 @@ const Gameboard = (props) => {
       squaresArray.push(
         <Square
           boardType={props.type}
-          key={`${x}, ${y}`}
-          id={`${x}, ${y}`}
+          key={`${x},${y}`}
+          id={`${x},${y}`}
           row={x}
           type={type}
           isHitClass={props.isHitClass}
@@ -35,7 +35,7 @@ const Gameboard = (props) => {
   });
 
   return (
-    <div className="gameBoard" onClick={props.onClick}>
+    <div className={`gameBoard ${props.type}Board`} onClick={props.onClick}>
       {squaresArray}
     </div>
   );
