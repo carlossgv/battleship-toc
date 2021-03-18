@@ -1,7 +1,11 @@
-import { createShip, Gameboard } from './AppFunctions';
+import {
+  createShip,
+  createGameboard,
+  getCoordinatesFromString,
+} from './AppFunctions';
 
 const ship = createShip(3);
-let shipsGameboard = Gameboard('ships');
+let shipsGameboard = createGameboard('ships');
 
 test("Ship's hit method", () => {
   expect(ship.hit(1)).toStrictEqual([
@@ -57,69 +61,111 @@ test('Ship placement inbound horizontal', () => {
   ]);
 });
 
-test('Ship placement inbound vertical', () => {
-  expect(shipsGameboard.placeShip(4, 4, ship, 'vertical')).toStrictEqual([
-    [false, false, false, false, false, false, false, false, false, false],
-    [
-      false,
-      ship.hitPoints[0],
-      ship.hitPoints[1],
-      ship.hitPoints[2],
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-    ],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [
-      false,
-      false,
-      false,
-      false,
-      ship.hitPoints[0],
-      false,
-      false,
-      false,
-      false,
-      false,
-    ],
-    [
-      false,
-      false,
-      false,
-      false,
-      ship.hitPoints[1],
-      false,
-      false,
-      false,
-      false,
-      false,
-    ],
-    [
-      false,
-      false,
-      false,
-      false,
-      ship.hitPoints[2],
-      false,
-      false,
-      false,
-      false,
-      false,
-    ],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-  ]);
+describe('Ship placements inbound testing', () => {
+  beforeEach(() => {
+    shipsGameboard = createGameboard('emptyShips');
+  });
+
+  test('Ship placement inbound horizontal', () => {
+    expect(shipsGameboard.placeShip(1, 1, ship, 'horizontal')).toStrictEqual([
+      [false, false, false, false, false, false, false, false, false, false],
+      [
+        false,
+        ship.hitPoints[0],
+        ship.hitPoints[1],
+        ship.hitPoints[2],
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+      ],
+      [false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false],
+    ]);
+  });
+
+  test('Ship placement inbound vertical', () => {
+    expect(shipsGameboard.placeShip(4, 4, ship, 'vertical')).toStrictEqual([
+      [false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false],
+      [
+        false,
+        false,
+        false,
+        false,
+        ship.hitPoints[0],
+        false,
+        false,
+        false,
+        false,
+        false,
+      ],
+      [
+        false,
+        false,
+        false,
+        false,
+        ship.hitPoints[1],
+        false,
+        false,
+        false,
+        false,
+        false,
+      ],
+      [
+        false,
+        false,
+        false,
+        false,
+        ship.hitPoints[2],
+        false,
+        false,
+        false,
+        false,
+        false,
+      ],
+      [false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false],
+    ]);
+  });
 });
 
-test('Missed received attack', () => {
-  expect(shipsGameboard.receiveAttack(0, 0)).toBe('missed');
+test('Board with ships still', () => {
+  expect(shipsGameboard.allShipSunked()).toBe(false);
 });
 
-test('Succesful received attack', () => {
-  expect(shipsGameboard.receiveAttack(1, 1)).toBe(shipsGameboard.array[(1, 1)]);
+describe('Placing ship and sunking it', () => {
+  beforeAll(() => {
+    shipsGameboard.placeShip(1, 1, ship, 'horizontal');
+    ship.hit(2);
+  });
+
+  test('Missed received attack', () => {
+    expect(shipsGameboard.receiveAttack(0, 0)).toBe('missed');
+  });
+
+  test('Succesful received attack', () => {
+    expect(shipsGameboard.receiveAttack(1, 1)).toBe(
+      shipsGameboard.array[(1, 1)]
+    );
+  });
+
+  test('All ships sunked', () => {
+    expect(shipsGameboard.allShipSunked()).toBe(true);
+  });
+});
+
+test('Convert coordinates string to vars', () => {
+  expect(getCoordinatesFromString('1,5')).toStrictEqual([1, 5]);
 });

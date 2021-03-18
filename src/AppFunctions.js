@@ -26,7 +26,7 @@ const createShip = (length) => {
   return { length, hitPoints, hit, isSunk };
 };
 
-const Gameboard = (type) => {
+const createGameboard = (type) => {
   const array = [
     [false, false, false, false, false, false, false, false, false, false],
     [false, false, false, false, false, false, false, false, false, false],
@@ -40,6 +40,18 @@ const Gameboard = (type) => {
     [false, false, false, false, false, false, false, false, false, false],
   ];
 
+  const allShipSunked = () => {
+    for (let i = 0; i < array.length; i++) {
+      for (let j = 0; j < array[i].length; j++) {
+        if (array[i][j].hit === false) {
+          return false;
+        }
+      }
+    }
+    console.log('%c', 'color:red', 'GAME FINISHED! ALL SHIPS SUNKED!');
+    return true;
+  };
+
   const missedAtttacks = [];
 
   const receiveAttack = (x, y) => {
@@ -48,7 +60,6 @@ const Gameboard = (type) => {
       return 'missed';
     } else if (array[x][y] !== 'missed') {
       array[x][y].hit = true;
-      console.log(array[(x, y)]);
       return array[(x, y)];
     }
   };
@@ -59,7 +70,8 @@ const Gameboard = (type) => {
     }
 
     if (direction === 'horizontal') {
-      if (y > 10 - ship.length) {
+      if (y > 10 - ship.length || array[x][y] !== false) {
+        console.log(`cant place ship in ${x},${y}`);
         return false;
       } else {
         for (let i = 0; i < ship.length; i++) {
@@ -72,7 +84,8 @@ const Gameboard = (type) => {
     }
 
     if (direction === 'vertical') {
-      if (x > 10 - ship.length) {
+      if (x > 10 - ship.length || array[x][y] !== false) {
+        console.log(`cant place ship in ${x},${y}`);
         return false;
       } else {
         for (let i = 0; i < ship.length; i++) {
@@ -85,7 +98,23 @@ const Gameboard = (type) => {
     }
   };
 
-  return { array, missedAtttacks, placeShip, receiveAttack };
+  return { array, missedAtttacks, placeShip, receiveAttack, allShipSunked };
 };
 
-export { createShip, Gameboard };
+const createPlayer = (type) => {
+  let name = '';
+  if (type !== 'computer') {
+    // name = prompt('Please enter your name');
+    name = 'User';
+  } else {
+    name = 'computer';
+  }
+};
+
+const getCoordinatesFromString = (stringCoordinates) => {
+  let x = parseInt(stringCoordinates.split(',')[0]);
+  let y = parseInt(stringCoordinates.split(',')[1]);
+  return [x, y];
+};
+
+export { createShip, createGameboard, createPlayer, getCoordinatesFromString };
