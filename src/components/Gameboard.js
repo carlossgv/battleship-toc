@@ -6,11 +6,9 @@ const Gameboard = (props) => {
   let squaresArray = [];
   let x = 0;
 
-  // console.log(props.type);
-  if (props.type === 'primary') {
-    console.log('Regular in gameboard', props.board.array);
-    console.log(props.testNumber)
-  }
+  // if (props.type === 'primary') {
+  //   console.log('Regular in gameboard', props.board.array);
+  // }
 
   props.board.array.forEach((row) => {
     let y = 0;
@@ -32,6 +30,7 @@ const Gameboard = (props) => {
           type={type}
           isHitClass={props.isHitClass}
           enemyArray={props.enemyArray}
+          gameFinished={props.gameFinished}
         />
       );
       y = y + 1;

@@ -11,7 +11,6 @@ const Square = (props) => {
     clicked: false,
   });
 
-
   if (props.type === false) {
     secondaryClass = 'emptySquare';
   } else {
@@ -19,6 +18,9 @@ const Square = (props) => {
   }
 
   const changeHitClass = (e) => {
+    if (props.gameFinished) {
+      return;
+    }
     if (props.boardType === 'tracking') {
       let coords = getCoordinatesFromString(e.target.id);
       if (props.enemyArray[coords[0]][coords[1]] instanceof Object) {

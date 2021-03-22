@@ -7,13 +7,11 @@ import {
   fillBoard,
   createGameboard,
 } from '../AppFunctions';
-import _ from 'lodash';
 
 const Main = () => {
-  const user = createPlayer('user');
+  // const user = createPlayer('user');
   const computer = createPlayer('computer');
 
-  const [testNumber, setTestNumber] = useState(0);
   const [boards, setBoards] = useState({
     userPrimaryGrid: createGameboard('primary'),
     userTrackingGrid: createGameboard('tracking'),
@@ -21,25 +19,44 @@ const Main = () => {
     computerTrackingGrid: createGameboard('tracking'),
   });
 
+  const [gameFinished, setGameFinished] = useState(false);
+
   useEffect(() => {
-    setBoards(fillBoard());
-    setTestNumber(_.random(0, 9));
+    fillBoard(boards.userPrimaryGrid);
+    fillBoard(boards.computerPrimaryGrid);
+    setBoards({
+      userPrimaryGrid: boards.userPrimaryGrid,
+      userTrackingGrid: boards.userTrackingGrid,
+      computerPrimaryGrid: boards.computerPrimaryGrid,
+      computerTrackingGrid: boards.computerTrackingGrid,
+    });
   }, []);
 
   const handleClick = (e) => {
     const attackCoordinates = getCoordinatesFromString(e.target.id);
-    e.target.removeEventListener('click', handleClick);
 
     console.log(attackCoordinates);
+
+    console.log(gameFinished);
+    if (gameFinished) {
+      return;
+    }
+
+    if (
+      !boards.computerPrimaryGrid.receiveAttack(
+        attackCoordinates[0],
+        attackCoordinates[1]
+      )
+    ) {
+      return;
+    }
 
     boards.computerPrimaryGrid.receiveAttack(
       attackCoordinates[0],
       attackCoordinates[1]
     );
 
-    console.log(boards.userPrimaryGrid.array);
     const computerAttack = computer.sendAttack(boards.userPrimaryGrid.array);
-    console.log(computerAttack.x, computerAttack.y, computerAttack.action);
 
     // TODO: Check if there is a way to do this inside Square component
     if (computerAttack) {
@@ -55,12 +72,14 @@ const Main = () => {
       }
     }
 
-    boards.computerPrimaryGrid.allShipSunked();
+    if (boards.computerPrimaryGrid.allShipSunked()) {
+      setGameFinished(true);
+      alert('YOU WON!');
+    } else if (boards.userPrimaryGrid.allShipSunked()) {
+      setGameFinished(true);
+      alert('YOU LOST');
+    }
   };
-
-  console.log('Array in Main', boards);
-
-  console.log(testNumber);
 
   return (
     <div className="Main">
@@ -69,10 +88,10 @@ const Main = () => {
           type={'primary'}
           board={boards.userPrimaryGrid}
           enemyArray={boards.computerTrackingGrid.array}
-          testNumber={testNumber}
         />
         <Gameboard
           type={'tracking'}
+          gameFinished={gameFinished}
           board={boards.userTrackingGrid}
           enemyArray={boards.computerPrimaryGrid.array}
           onClick={handleClick}
