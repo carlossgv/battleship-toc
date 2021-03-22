@@ -171,27 +171,7 @@ test('Convert coordinates string to vars', () => {
   expect(getCoordinatesFromString('1,5')).toStrictEqual([1, 5]);
 });
 
-// describe('Test random number', () => {
-//   beforeAll(() => {
-//     const computer = createPlayer('computer');
-//     const enemyArray = createGameboard('primary');
-
-//     const carrier = createShip(5);
-//     const battleship = createShip(4);
-//     const cruiser = createShip(3);
-//     const submarine = createShip(3);
-//     const destroyer = createShip(2);
-
-//     enemyArray.placeShip(1, 1, carrier, 'vertical');
-//     enemyArray.placeShip(1, 4, battleship, 'horizontal');
-//     enemyArray.placeShip(6, 6, cruiser, 'vertical');
-//     enemyArray.placeShip(4, 4, submarine, 'horizontal');
-//     enemyArray.placeShip(8, 8, destroyer, 'vertical');
-
-//     return { computer, enemyArray };
-//   });
-
-//   test('Random number within range 0-9', () => {
-//     expect(computer.sendAttack(enemyArray)).toBe();
-//   });
-// });
+if (shipsGameboard.randomPlaceShip >= 0 && shipsGameboard.randomPlaceShip <= 1)
+  test('randomDirection Generator', () => {
+    expect(shipsGameboard.randomPlaceShip).toBeTruthy();
+  });

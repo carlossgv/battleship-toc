@@ -4,3 +4,10 @@
   box-sizing: border-box;
 }
 
+.App {
+  background: #91C3DC;
+  position: relative;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-width: 430px;
+}

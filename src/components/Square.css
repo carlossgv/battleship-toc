@@ -1,5 +1,5 @@
 .square {
-  border: black 1px solid;
+  border: gray 1px solid;
   width: 2rem;
   height: 2rem;
   display: flex;

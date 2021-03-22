@@ -1,0 +1,41 @@
+@font-face {
+  font-family: 'NFL Dolphins';
+  src: url('../static/fonts/NFLDolphins.eot');
+  src: url('../static/fonts/NFLDolphins.eot?#iefix') format('embedded-opentype'),
+    url('../static/fonts/NFLDolphins.woff2') format('woff2'),
+    url('../static/fonts/NFLDolphins.woff') format('woff'),
+    url('../static/fonts/NFLDolphins.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'USNavy';
+  src: url('../static/fonts/USNavy.eot');
+  src: url('../static/fonts/USNavy.eot?#iefix') format('embedded-opentype'),
+    url('../static/fonts/USNavy.woff2') format('woff2'),
+    url('../static/fonts/USNavy.woff') format('woff'),
+    url('../static/fonts/USNavy.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.header {
+  padding: 2rem;
+  color: white;
+  background: #4086AA;
+}
+
+.title {
+  font-family: NFL Dolphins;
+  text-align: center;
+  font-size: 3.5rem;
+  -webkit-text-stroke: 1px black;
+}
+
+.silhouettes {
+  font-family: USNavy;
+  text-align: center;
+}

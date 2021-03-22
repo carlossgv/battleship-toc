@@ -1,54 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Gameboard from './Gameboard';
+import './Main.css';
 import {
-  createShip,
-  createGameboard,
   createPlayer,
   getCoordinatesFromString,
+  fillBoard,
+  createGameboard,
 } from '../AppFunctions';
+import _ from 'lodash';
 
 const Main = () => {
   const user = createPlayer('user');
   const computer = createPlayer('computer');
 
-  const carrier = createShip(5);
-  const battleship = createShip(4);
-  const cruiser = createShip(3);
-  const submarine = createShip(3);
-  const destroyer = createShip(2);
+  const [testNumber, setTestNumber] = useState(0);
+  const [boards, setBoards] = useState({
+    userPrimaryGrid: createGameboard('primary'),
+    userTrackingGrid: createGameboard('tracking'),
+    computerPrimaryGrid: createGameboard('primary'),
+    computerTrackingGrid: createGameboard('tracking'),
+  });
 
-  // Gameboards setup
-
-  const userPrimaryGrid = createGameboard('primary');
-  const userTrackingGrid = createGameboard('tracking');
-
-  userPrimaryGrid.placeShip(1, 1, carrier, 'vertical');
-  userPrimaryGrid.placeShip(1, 4, battleship, 'horizontal');
-  userPrimaryGrid.placeShip(6, 6, cruiser, 'vertical');
-  userPrimaryGrid.placeShip(4, 4, submarine, 'horizontal');
-  userPrimaryGrid.placeShip(8, 8, destroyer, 'vertical');
-
-  const computerPrimaryGrid = createGameboard('primary');
-  const computerTrackingGrid = createGameboard('tracking');
-
-  computerPrimaryGrid.placeShip(1, 1, carrier, 'vertical');
-  computerPrimaryGrid.placeShip(1, 4, battleship, 'horizontal');
-  computerPrimaryGrid.placeShip(6, 6, cruiser, 'vertical');
-  computerPrimaryGrid.placeShip(4, 4, submarine, 'horizontal');
-  computerPrimaryGrid.placeShip(8, 8, destroyer, 'vertical');
+  useEffect(() => {
+    setBoards(fillBoard());
+    setTestNumber(_.random(0, 9));
+  }, []);
 
   const handleClick = (e) => {
     const attackCoordinates = getCoordinatesFromString(e.target.id);
+    e.target.removeEventListener('click', handleClick);
 
     console.log(attackCoordinates);
 
-    computerPrimaryGrid.receiveAttack(
+    boards.computerPrimaryGrid.receiveAttack(
       attackCoordinates[0],
       attackCoordinates[1]
     );
 
-    console.log(userPrimaryGrid.array);
-    const computerAttack = computer.sendAttack(userPrimaryGrid.array);
+    console.log(boards.userPrimaryGrid.array);
+    const computerAttack = computer.sendAttack(boards.userPrimaryGrid.array);
     console.log(computerAttack.x, computerAttack.y, computerAttack.action);
 
     // TODO: Check if there is a way to do this inside Square component
@@ -57,27 +47,46 @@ const Main = () => {
         `.primaryBoard #\\3${computerAttack.x} \\,${computerAttack.y}`
       );
       domComputerAttack.classList.remove('notHit');
-      domComputerAttack.classList.add('isHit');
+
+      if (domComputerAttack.classList.contains('shipSquare')) {
+        domComputerAttack.classList.add('isHit');
+      } else {
+        domComputerAttack.classList.add('isMiss');
+      }
     }
 
-    computerPrimaryGrid.allShipSunked();
+    boards.computerPrimaryGrid.allShipSunked();
   };
 
+  console.log('Array in Main', boards);
+
+  console.log(testNumber);
+
   return (
-    <div className="main">
-      <Gameboard
-        type={'primary'}
-        board={userPrimaryGrid}
-        array={userPrimaryGrid.array}
-        enemyArray={computerTrackingGrid}
-      />
-      <Gameboard
-        type={'tracking'}
-        board={userTrackingGrid}
-        array={userTrackingGrid.array}
-        enemyArray={computerPrimaryGrid.array}
-        onClick={handleClick}
-      />
+    <div className="Main">
+      <div className="gameBoards">
+        <Gameboard
+          type={'primary'}
+          board={boards.userPrimaryGrid}
+          enemyArray={boards.computerTrackingGrid.array}
+          testNumber={testNumber}
+        />
+        <Gameboard
+          type={'tracking'}
+          board={boards.userTrackingGrid}
+          enemyArray={boards.computerPrimaryGrid.array}
+          onClick={handleClick}
+        />
+      </div>
+      <div className="linkContainer">
+        <a
+          href="https://en.wikipedia.org/wiki/Battleship_(game)"
+          rel="noreferrer"
+          target="_blank"
+        >
+          How to play
+        </a>
+      </div>
     </div>
   );
 };

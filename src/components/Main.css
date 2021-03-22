@@ -1,0 +1,27 @@
+@media (min-width: 46rem) {
+  .gameBoards {
+    display: flex;
+  }
+}
+
+.Main {
+  max-width: 46rem;
+  margin: auto;
+  padding-bottom: 1rem;
+}
+
+.linkContainer {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.Main a {
+  text-decoration: none;
+  cursor: pointer;
+  color: white;
+}
+
+.Main a:hover {
+  font-size: 1.1rem;
+  color: grey;
+}

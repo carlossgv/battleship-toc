@@ -6,7 +6,13 @@ const Gameboard = (props) => {
   let squaresArray = [];
   let x = 0;
 
-  props.array.forEach((row) => {
+  // console.log(props.type);
+  if (props.type === 'primary') {
+    console.log('Regular in gameboard', props.board.array);
+    console.log(props.testNumber)
+  }
+
+  props.board.array.forEach((row) => {
     let y = 0;
     row.forEach((square) => {
       let type = '';

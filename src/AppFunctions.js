@@ -67,41 +67,89 @@ const createGameboard = (type) => {
     }
   };
 
-  const placeShip = (x, y, ship, direction) => {
-    if (x < 0 || y < 0) {
-      return false;
-    }
+  const placeShip = (ship) => {
+    let coords = randomCoordinates(ship);
+    let direction = coords.direction;
+    let x = coords.x;
+    let y = coords.y;
 
     if (direction === 'horizontal') {
-      if (y > 10 - ship.length || array[x][y] !== false) {
-        console.log(`cant place ship in ${x},${y}`);
-        return false;
-      } else {
-        for (let i = 0; i < ship.length; i++) {
-          ship.hitPoints[i].x = x;
-          ship.hitPoints[i].y = i + y;
-          array[x][i + y] = ship.hitPoints[i];
-        }
-        return array;
+      for (let i = 0; i < ship.length; i++) {
+        console.log('inside if', x, y, direction);
+        ship.hitPoints[i].x = x;
+        ship.hitPoints[i].y = i + y;
+        array[x][i + y] = ship.hitPoints[i];
+      }
+    } else {
+      for (let i = 0; i < ship.length; i++) {
+        console.log('inside if', x, y, direction);
+        ship.hitPoints[i].x = i + x;
+        ship.hitPoints[i].y = y;
+        array[i + x][y] = ship.hitPoints[i];
       }
     }
 
-    if (direction === 'vertical') {
-      if (x > 10 - ship.length || array[x][y] !== false) {
-        console.log(`cant place ship in ${x},${y}`);
-        return false;
-      } else {
-        for (let i = 0; i < ship.length; i++) {
-          ship.hitPoints[i].x = i + x;
-          ship.hitPoints[i].y = y;
-          array[i + x][y] = ship.hitPoints[i];
-        }
-        return array;
-      }
-    }
+    return { x, y, direction };
   };
 
-  return { array, missedAtttacks, placeShip, receiveAttack, allShipSunked };
+  const randomCoordinates = (ship) => {
+    let direction = '';
+    let randomDirection = _.random(0, 1);
+    let x = _.random(0, 9);
+    let y = _.random(0, 9);
+
+    randomDirection === 0
+      ? (direction = 'horizontal')
+      : (direction = 'vertical');
+
+    let position = false;
+    while (position === false) {
+      if (direction === 'horizontal') {
+        if (y > 10 - ship.length || array[x][y] !== false) {
+          console.log(`cant place ship in ${x},${y}`);
+          randomDirection = _.random(0, 1);
+          x = _.random(0, 9);
+          y = _.random(0, 9);
+          randomDirection === 0
+            ? (direction = 'horizontal')
+            : (direction = 'vertical');
+          console.log(x, y, direction);
+        } else {
+          for (let i = 0; i < ship.length; i++) {
+            position = true;
+          }
+        }
+      }
+
+      if (direction === 'vertical') {
+        if (x > 10 - ship.length || array[x][y] !== false) {
+          console.log(`cant place ship in ${x},${y}`);
+          randomDirection = _.random(0, 1);
+          x = _.random(0, 9);
+          y = _.random(0, 9);
+          randomDirection === 0
+            ? (direction = 'horizontal')
+            : (direction = 'vertical');
+          console.log(x, y, direction);
+        } else {
+          for (let i = 0; i < ship.length; i++) {
+            position = true;
+          }
+        }
+      }
+    }
+    console.log(x, y, direction);
+    return { x, y, direction };
+  };
+
+  return {
+    array,
+    missedAtttacks,
+    placeShip,
+    receiveAttack,
+    allShipSunked,
+    fillBoard,
+  };
 };
 
 const createPlayer = (type) => {
@@ -142,4 +190,45 @@ const getCoordinatesFromString = (stringCoordinates) => {
   return [x, y];
 };
 
-export { createShip, createGameboard, createPlayer, getCoordinatesFromString };
+const fillBoard = () => {
+  const carrier = createShip(5);
+  const battleship = createShip(4);
+  const cruiser = createShip(3);
+  const submarine = createShip(3);
+  const destroyer = createShip(2);
+
+  // Gameboards setup
+
+  const userPrimaryGrid = createGameboard('primary');
+  const userTrackingGrid = createGameboard('tracking');
+
+  userPrimaryGrid.placeShip(carrier);
+  userPrimaryGrid.placeShip(battleship);
+  userPrimaryGrid.placeShip(cruiser);
+  userPrimaryGrid.placeShip(submarine);
+  userPrimaryGrid.placeShip(destroyer);
+
+  const computerPrimaryGrid = createGameboard('primary');
+  const computerTrackingGrid = createGameboard('tracking');
+
+  computerPrimaryGrid.placeShip(carrier);
+  computerPrimaryGrid.placeShip(battleship);
+  computerPrimaryGrid.placeShip(cruiser);
+  computerPrimaryGrid.placeShip(submarine);
+  computerPrimaryGrid.placeShip(destroyer);
+
+  return {
+    userPrimaryGrid,
+    userTrackingGrid,
+    computerPrimaryGrid,
+    computerTrackingGrid,
+  };
+};
+
+export {
+  createShip,
+  createGameboard,
+  createPlayer,
+  getCoordinatesFromString,
+  fillBoard,
+};
