@@ -104,14 +104,13 @@ const createGameboard = (type) => {
     while (position === false) {
       if (direction === 'horizontal') {
         if (y > 10 - ship.length || array[x][y] !== false) {
-          // console.log(`cant place ship in ${x},${y}`);
+          console.log(`cant place ship in ${x},${y}`);
           randomDirection = _.random(0, 1);
           x = _.random(0, 9);
           y = _.random(0, 9);
           randomDirection === 0
             ? (direction = 'horizontal')
             : (direction = 'vertical');
-          // console.log(x, y, direction);
         } else {
           for (let i = 0; i < ship.length; i++) {
             position = true;
@@ -121,7 +120,7 @@ const createGameboard = (type) => {
 
       if (direction === 'vertical') {
         if (x > 10 - ship.length || array[x][y] !== false) {
-          // console.log(`cant place ship in ${x},${y}`);
+          console.log(`cant place ship in ${x},${y}`);
           randomDirection = _.random(0, 1);
           x = _.random(0, 9);
           y = _.random(0, 9);
@@ -197,26 +196,11 @@ const fillBoard = (grid) => {
   const submarine = createShip(3);
   const destroyer = createShip(2);
 
-  // // Gameboards setup
-  // const userPrimaryGrid = createGameboard('primary');
-  // const userTrackingGrid = createGameboard('tracking');
-
   grid.placeShip(carrier);
   grid.placeShip(battleship);
   grid.placeShip(cruiser);
   grid.placeShip(submarine);
   grid.placeShip(destroyer);
-
-  // const computerPrimaryGrid = createGameboard('primary');
-  // const computerTrackingGrid = createGameboard('tracking');
-
-  // computerPrimaryGrid.placeShip(carrier);
-  // computerPrimaryGrid.placeShip(battleship);
-  // computerPrimaryGrid.placeShip(cruiser);
-  // computerPrimaryGrid.placeShip(submarine);
-  // computerPrimaryGrid.placeShip(destroyer);
-
-  // return array;
 };
 
 export {

@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'NFL Dolphins';
+  font-family: 'NFLDolphins';
   src: url('../static/fonts/NFLDolphins.eot');
   src: url('../static/fonts/NFLDolphins.eot?#iefix') format('embedded-opentype'),
     url('../static/fonts/NFLDolphins.woff2') format('woff2'),
@@ -30,7 +30,7 @@
 }
 
 .title {
-  font-family: NFL Dolphins;
+  font-family: NFLDolphins;
   text-align: center;
   font-size: 3.5rem;
   -webkit-text-stroke: 1px black;

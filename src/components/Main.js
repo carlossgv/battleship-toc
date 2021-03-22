@@ -9,7 +9,6 @@ import {
 } from '../AppFunctions';
 
 const Main = () => {
-  // const user = createPlayer('user');
   const computer = createPlayer('computer');
 
   const [boards, setBoards] = useState({
@@ -21,6 +20,8 @@ const Main = () => {
 
   const [gameFinished, setGameFinished] = useState(false);
 
+  const [result, setResult] = useState('');
+
   useEffect(() => {
     fillBoard(boards.userPrimaryGrid);
     fillBoard(boards.computerPrimaryGrid);
@@ -30,9 +31,15 @@ const Main = () => {
       computerPrimaryGrid: boards.computerPrimaryGrid,
       computerTrackingGrid: boards.computerTrackingGrid,
     });
-  }, []);
+  }, [
+    boards.computerPrimaryGrid,
+    boards.computerTrackingGrid,
+    boards.userPrimaryGrid,
+    boards.userTrackingGrid,
+  ]);
 
   const handleClick = (e) => {
+    //TODO: PREVENT ERROR WHEN TRYING TO DRAG INSIDE GAMEBOARD
     const attackCoordinates = getCoordinatesFromString(e.target.id);
 
     console.log(attackCoordinates);
@@ -56,6 +63,7 @@ const Main = () => {
       attackCoordinates[1]
     );
 
+    // TODO: Improve computer attack (i.e. select square next to previous if it was a hit)
     const computerAttack = computer.sendAttack(boards.userPrimaryGrid.array);
 
     // TODO: Check if there is a way to do this inside Square component
@@ -72,12 +80,16 @@ const Main = () => {
       }
     }
 
+    const modal = document.querySelector('.modal');
+
     if (boards.computerPrimaryGrid.allShipSunked()) {
       setGameFinished(true);
-      alert('YOU WON!');
+      setResult('won');
+      modal.style.display = 'block';
     } else if (boards.userPrimaryGrid.allShipSunked()) {
       setGameFinished(true);
-      alert('YOU LOST');
+      setResult('lost');
+      modal.style.display = 'block';
     }
   };
 
@@ -105,6 +117,14 @@ const Main = () => {
           <div>
             <p>Opponent's grid</p>
           </div>{' '}
+          <div className="modal">
+            <div className="modalContent">
+              <h6>You {result}!</h6>
+              <button onClick={() => window.location.reload()}>
+                Play Again
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <div className="linkContainer">
