@@ -8,13 +8,13 @@
 }
 
 .isHit {
-  background-color: red !important;
+  background-color: #FF0000 !important;
 }
 
 .isMiss {
-  background-color: green;
+  background-color: #4FC1E9;
 }
 
 .shipSquare {
-  background: blue;
+  background: #434A54;
 }

@@ -84,18 +84,28 @@ const Main = () => {
   return (
     <div className="Main">
       <div className="gameBoards">
-        <Gameboard
-          type={'primary'}
-          board={boards.userPrimaryGrid}
-          enemyArray={boards.computerTrackingGrid.array}
-        />
-        <Gameboard
-          type={'tracking'}
-          gameFinished={gameFinished}
-          board={boards.userTrackingGrid}
-          enemyArray={boards.computerPrimaryGrid.array}
-          onClick={handleClick}
-        />
+        <div className="grid playersGrid">
+          <Gameboard
+            type={'primary'}
+            board={boards.userPrimaryGrid}
+            enemyArray={boards.computerTrackingGrid.array}
+          />
+          <div>
+            <p>Your grid</p>
+          </div>{' '}
+        </div>
+        <div className="grid computersGrid">
+          <Gameboard
+            type={'tracking'}
+            gameFinished={gameFinished}
+            board={boards.userTrackingGrid}
+            enemyArray={boards.computerPrimaryGrid.array}
+            onClick={handleClick}
+          />
+          <div>
+            <p>Opponent's grid</p>
+          </div>{' '}
+        </div>
       </div>
       <div className="linkContainer">
         <a

@@ -25,7 +25,8 @@
 .header {
   padding: 2rem;
   color: white;
-  background: #4086AA;
+  background: #4086aa;
+  margin-bottom: 1rem;
 }
 
 .title {
